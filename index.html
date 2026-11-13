@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>低空航路数字护栏 · 通感算智一体化动态场景演示</title>
+<meta name="description" content="低空航路数字护栏——通感算智一体化的城市低空无人机航路保障。12 个 6G 通感节点、AI 非视距补偿、时空双门限冲突消解的可视化演示。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230a1020'/><path d='M6 21h20M9 21l3-9 4 5 3-7 4 11' stroke='%2335e0d0' stroke-width='2.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<!-- ============ 顶栏 ============ -->
+<header class="site-header" id="siteHeader">
+  <a class="brand" href="#top">
+    <span class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 40 40"><defs><linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#35e0d0"/><stop offset="1" stop-color="#4d8dff"/></linearGradient></defs>
+        <rect x="1" y="1" width="38" height="38" rx="11" fill="none" stroke="url(#bg1)" stroke-width="1.4" opacity=".55"/>
+        <path d="M8 26h24M11 26l3.4-10 4 5.6 3.6-8 4.4 12.4" fill="none" stroke="url(#bg1)" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </span>
+    <span class="brand-text">
+      <b>低空航路数字护栏</b>
+      <i>ISAC × AI · 场景设计</i>
+    </span>
+  </a>
+  <nav class="nav" id="mainNav">
+    <a href="#context">场景</a>
+    <a href="#demo">动态演示</a>
+    <a href="#tech">技术链路</a>
+    <a href="#resource">资源协同</a>
+    <a href="#deploy">部署路径</a>
+    <a href="#verify">验证</a>
+    <a href="#evidence">佐证</a>
+  </nav>
+  <div class="header-meta">
+    <span class="pill live"><span class="dot"></span>仿真验证</span>
+    <span class="pill seed">SEED 20261113</span>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ 首屏 ============ -->
+  <section class="hero" id="hero">
+    <canvas id="heroCanvas" class="hero-canvas" aria-hidden="true"></canvas>
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <p class="eyebrow">第八届全球校园人工智能算法精英大赛 · 人工智能 + 6G 青年创新创业专项赛</p>
+        <h1><span class="grad">低空航路数字护栏</span></h1>
+        <p class="hero-sub">通感算智一体化的城市低空无人机航路保障</p>
+        <p class="hero-lead">
+          把城市既有的楼顶与杆塔站址改造成 <b>12 个 6G 通感一体化节点</b>，让基站同时承担“雷达”职能，
+          沿航路形成连续感知带；再以 AI 解决城市峡谷绕不开的两个物理瓶颈——<b>强静态杂波</b>与<b>非视距测距偏差</b>。
+          本页把方案中的部署、信号处理、融合定位与冲突消解，做成一条可交互、可回放的动态场景。
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#demo">进入动态演示</a>
+          <a class="btn ghost" href="#tech">查看技术链路</a>
+        </div>
+        <p class="hero-note">
+          场景设计赛道 · 面向实际需求的应用场景设计方案 ｜ 全部量化结果为<b>仿真验证</b>，非外场实测
+        </p>
+      </div>
+      <aside class="hero-stats" aria-label="核心指标">
+        <div class="stat">
+          <span class="stat-label">水平定位 CEP95</span>
+          <span class="stat-value" data-count="30.5" data-dec="1" data-suffix=" m">30.5 m</span>
+          <span class="stat-sub"><em>→</em> <b>10.3 m</b>　提升 66.2%</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">非视距识别准确率</span>
+          <span class="stat-value" data-count="99.7" data-dec="1" data-suffix="%">99.7%</span>
+          <span class="stat-sub">F1 = 0.996　附加距离 RMSE 3.34 m</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">单站可靠感知半径</span>
+          <span class="stat-value" data-count="502" data-suffix=" m">502 m</span>
+          <span class="stat-sub">Pd = 0.9 · 杂波受限（热噪声受限可达 3.2 km）</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">端到端感知—告警时延</span>
+          <span class="stat-value" data-count="27.3" data-dec="1" data-suffix=" ms">27.3 ms</span>
+          <span class="stat-sub">设计上限 100 ms　边端加速 40×</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">静态杂波抑制增益</span>
+          <span class="stat-value" data-count="29.2" data-dec="1" data-suffix=" dB">29.2 dB</span>
+          <span class="stat-sub">MTI 后 Pd ≥ 0.9 的速度下限降至 1.8 m/s</span>
+        </div>
+        <p class="stat-foot">数据源：sim/results/results.json（10 Hz × 300 s × 6 机 × 20 组）</p>
+      </aside>
+    </div>
+    <div class="hero-scroll"><span></span>向下滚动查看动态场景</div>
+  </section>
+
+  <!-- ============ 一、场景与痛点 ============ -->
+  <section class="section" id="context">
+    <div class="section-head">
+      <span class="sec-index">01</span>
+      <div>
+        <h2>场景：城市峡谷里的“看不见、管不住”</h2>
+        <p class="sec-lead">需求方是低空物流运营企业、地方低空飞行服务机构与公安 / 应急部门。三者诉求不同，但共享同一技术底座：一条连续、可信、低时延的低空位置与态势数据链。</p>
+      </div>
+    </div>
+
+    <div class="context-grid">
+      <article class="card pad">
+        <h3 class="card-title">为什么是现在</h3>
+        <ul class="timeline-list">
+          <li><b>制度侧</b><span>《无人驾驶航空器飞行管理暂行条例》实施，真高 120 m 以下适飞空域、实名登记与航路报备成为刚性要求，监管侧出现对“低成本连续监视”的真实采购需求。</span></li>
+          <li><b>标准侧</b><span>ITU-R IMT-2030 将“通感融合”列为 6G 六大典型场景；3GPP TS 22.837 与 TR 38.859 完成了网络侧感知的用例与评估框架，使“基站当雷达用”具备标准化路径。</span></li>
+          <li><b>产业侧</b><span>低空经济列为战略性新兴产业，城市杆塔开放与“一杆多用”成为地方共识，为通感节点的低成本规模化部署提供站址条件。</span></li>
+        </ul>
+      </article>
+      <article class="card pad">
+        <h3 class="card-title">需求来源全部可核验</h3>
+        <ul class="source-list">
+          <li><span>空域与飞行管理</span><b>《无人驾驶航空器飞行管理暂行条例》</b><em>国务院、中央军委令第 761 号</em></li>
+          <li><span>设备安全要求</span><b>GB 42590—2023</b><em>民用无人驾驶航空器系统安全要求</em></li>
+          <li><span>6G 通感标准</span><b>ITU-R IMT-2030 / 3GPP TS 22.837 / TR 38.859</b><em>网络侧感知用例与评估方法</em></li>
+          <li><span>低空信道模型</span><b>3GPP TR 36.777 UMa-AV</b><em>链路预算直接采用</em></li>
+        </ul>
+        <p class="tiny">不依赖未经核实的内部数据；所有指标均给出定义、目标值与测量方法。</p>
+      </article>
+    </div>
+
+    <div class="pain-grid" id="painGrid"></div>
+
+    <div class="split">
+      <div class="split-copy">
+        <h3>现有手段的能力边界</h3>
+        <p>四类可用路径各自缺一块：没有任何单一手段能同时满足<strong>公里级覆盖、米级精度、低时延、低成本</strong>四项要求——这正是 6G 通感一体化的机会所在。</p>
+      </div>
+      <div class="table-wrap" id="existingWrap"></div>
+    </div>
+
+    <div class="kpi-block">
+      <div class="block-head">
+        <h3>八项 KPI：把业务诉求转译成可测量的数字</h3>
+        <span class="legend-chip"><i class="ok"></i>仿真已达成　<i class="watch"></i>待验证</span>
+      </div>
+      <div class="table-wrap" id="kpiWrap"></div>
+    </div>
+  </section>
+
+  <!-- ============ 二、动态演示 ============ -->
+  <section class="section section-demo" id="demo">
+    <div class="section-head">
+      <span class="sec-index">02</span>
+      <div>
+        <h2>动态演示：2 km 航路、12 站、6 架并行</h2>
+        <p class="sec-lead">按方案参数实时生成的城市峡谷态势：节点交错布置、逐站视距判定、NLOSNet 去偏、EKF 融合、TrajNet 预测与时空双门限告警。可切换三种定位方案对比误差包络，可开关避让策略观察告警全流程。</p>
+      </div>
+    </div>
+
+    <div class="demo-shell">
+      <div class="demo-stage">
+        <div class="stage-bar">
+          <div class="stage-title">
+            <span class="rec"></span>
+            <b>航路态势</b>
+            <span class="stage-sub">俯视 · 2 000 m × 900 m · 10 Hz</span>
+          </div>
+          <div class="stage-tools">
+            <button class="btn tiny" id="btnPlay" title="空格键播放 / 暂停"><span class="ico">❚❚</span>暂停</button>
+            <button class="btn tiny ghost" id="btnReset">复位</button>
+            <div class="seg" id="speedSeg" role="group" aria-label="播放速度">
+              <button data-speed="1" class="on">1×</button>
+              <button data-speed="4">4×</button>
+              <button data-speed="16">16×</button>
+            </div>
+          </div>
+        </div>
+        <div class="canvas-hold">
+          <canvas id="sceneCanvas"></canvas>
+          <div class="stage-hint">点击画面可选中最近的无人机</div>
+        </div>
+        <div class="timeline">
+          <input type="range" id="timeScrub" min="0" max="120" step="0.1" value="0" aria-label="时间轴">
+          <div class="timeline-meta">
+            <span id="tlTime">T + 0.0 s</span>
+            <span id="tlLoop">循环 120 s</span>
+          </div>
+        </div>
+        <div class="stage-legend">
+          <span><i class="dot s-node"></i>通感节点</span>
+          <span><i class="dot s-los"></i>视距参与站</span>
+          <span><i class="dot s-nlos"></i>非视距（已补偿）</span>
+          <span><i class="line s-truth"></i>真值航迹</span>
+          <span><i class="line s-fused"></i>融合定位（EKF）</span>
+          <span><i class="line s-gnss"></i>纯 GNSS 位置</span>
+          <span><i class="line s-pred"></i>1.5 s 轨迹预测</span>
+          <span><i class="line s-gate"></i>安全间隔门限</span>
+        </div>
+      </div>
+
+      <div class="demo-strip">
+        <div class="dpanel">
+          <div class="panel-head">
+            <h3>实时指标</h3>
+            <span class="mini" id="mPairLabel">无告警</span>
+          </div>
+          <div class="metric-grid">
+            <div class="metric big">
+              <span class="m-label">当前水平误差</span>
+              <span class="m-value" id="mErr">—</span>
+              <span class="m-sub" id="mErrSub">CEP95 统计 —</span>
+            </div>
+            <div class="metric">
+              <span class="m-label">参与 / 视距 / 非视距</span>
+              <span class="m-value sm" id="mStations">—</span>
+              <span class="m-sub" id="mConf">NLOSNet 置信度 —</span>
+            </div>
+            <div class="metric">
+              <span class="m-label">最近接近（水平 / 垂直）</span>
+              <span class="m-value sm" id="mGap">—</span>
+              <span class="m-sub">门限 30 m / 10 m</span>
+            </div>
+            <div class="metric">
+              <span class="m-label">告警级别</span>
+              <span class="m-value sm level" id="mLevel">—</span>
+              <span class="m-sub" id="mLevelSub">三级策略：告警 → 减速 → 航路重规划</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dpanel">
+          <div class="panel-head">
+            <h3>方案对比与开关</h3>
+            <span class="mini">σ 由表 9 CEP95 反推</span>
+          </div>
+          <div class="seg full" id="modeSeg" role="group" aria-label="定位方案">
+            <button data-mode="A">A 纯 GNSS</button>
+            <button data-mode="B">B 直接融合</button>
+            <button data-mode="C" class="on">C 本文方案</button>
+          </div>
+          <div class="switch-row">
+            <label class="switch"><input type="checkbox" id="chkCoverage" checked><span></span>覆盖圈</label>
+            <label class="switch"><input type="checkbox" id="chkGnss" checked><span></span>GNSS 对照</label>
+            <label class="switch"><input type="checkbox" id="chkPredict" checked><span></span>轨迹预测</label>
+            <label class="switch"><input type="checkbox" id="chkAvoid"><span></span>避让策略</label>
+          </div>
+          <div class="sep-wrap">
+            <div class="panel-block-head">
+              <h4>冲突对间距（最近 24 s）</h4>
+              <span class="mini">m</span>
+            </div>
+            <canvas id="conflictCanvas" class="mini-chart"></canvas>
+          </div>
+        </div>
+
+        <div class="dpanel">
+          <div class="panel-head">
+            <h3>处理链路事件</h3>
+            <span class="mini">10 Hz · CPI 20 ms</span>
+          </div>
+          <ul class="event-log" id="eventLog"></ul>
+          <div class="log-foot">
+            <div class="log-foot-head"><span>端到端时延</span><b>27.3 ms</b><em>/ 100 ms 预算</em></div>
+            <div class="log-foot-bar"><i style="width:27.3%"></i></div>
+            <div class="log-foot-grid">
+              <span>CPI 20.0</span><span>站侧 5.71</span><span>回传 0.5</span><span>AI 0.02</span><span>告警 1.0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="figure-note">说明：画面中的目标轨迹、视距 / 非视距判定与误差包络按方案参数（标准差由表 9 的 CEP95 反推）实时生成，用于呈现处理流程与告警逻辑；统计指标取自 results.json 的仿真结果，非外场实测。</p>
+  </section>
+
+  <!-- ============ 三、技术链路 ============ -->
+  <section class="section" id="tech">
+    <div class="section-head">
+      <span class="sec-index">03</span>
+      <div>
+        <h2>技术链路：从回波到告警，27.3 ms</h2>
+        <p class="sec-lead">感知—上报—定位—预测—决策闭环。关键判断只有一句：城市低空的瓶颈是杂波而非热噪声，因此算法资源应投向杂波抑制与非视距补偿，而不是堆发射功率。</p>
+      </div>
+    </div>
+
+    <div class="pipeline" id="pipeline"></div>
+
+    <div class="tech-grid">
+      <article class="card pad tech-card">
+        <div class="card-head">
+          <h3>波形与分辨率</h3>
+          <span class="tag">6G cmWave</span>
+        </div>
+        <div class="param-grid">
+          <div><span>载频</span><b>6.4 GHz</b></div>
+          <div><span>带宽</span><b>100 MHz</b></div>
+          <div><span>子载波间隔</span><b>60 kHz</b></div>
+          <div><span>FFT / 有效子载波</span><b>2048 / 1666</b></div>
+          <div><span>CPI</span><b>20 ms（1200 符号）</b></div>
+          <div><span>相参积累增益</span><b>63.0 dB</b></div>
+          <div><span>距离栅格 / 分辨率</span><b>1.22 m / 1.50 m</b></div>
+          <div><span>速度栅格</span><b>1.17 m/s</b></div>
+        </div>
+        <p class="card-note">通信参考信号即感知参考：参考除法得到 H[k,n]，目标回波表现为沿子载波与符号的线性相位，二维 FFT 即得距离—多普勒图。</p>
+      </article>
+
+      <article class="card pad tech-card">
+        <div class="card-head">
+          <h3>为什么是“杂波受限”</h3>
+          <span class="tag red">关键判断</span>
+        </div>
+        <canvas id="rangeCanvas" class="chart"></canvas>
+        <p class="card-note">按雷达方程核算，仅计热噪声时单站 Pd=0.9 可达 <b>3.2 km</b>；计入城市杂波后同口径仅 <b>502 m</b>（非视距 212 m），相差约 6.3 倍。差额来自杂波与遮挡——这直接决定了算法资源的投放方向。</p>
+      </article>
+
+      <article class="card pad tech-card wide">
+        <div class="card-head">
+          <h3>距离—多普勒域：MTI 打开被杂波遮蔽的速度带</h3>
+          <span class="tag amber">可交互</span>
+        </div>
+        <div class="rd-shell">
+          <div class="rd-canvas-wrap">
+            <canvas id="rdCanvas"></canvas>
+          </div>
+          <div class="rd-controls">
+            <label class="slider-label">目标径向速度 <output id="rdVOut">6.0 m/s</output></label>
+            <input type="range" id="rdV" min="0.4" max="14" step="0.1" value="6">
+            <label class="switch strong"><input type="checkbox" id="rdMti" checked><span></span>启用慢时间 MTI</label>
+            <div class="rd-readout">
+              <div><span>检测概率 Pd</span><b id="rdPd">—</b></div>
+              <div><span>杂波抑制</span><b id="rdSupp">—</b></div>
+              <div><span>速度盲区</span><b>±1.17 m/s</b></div>
+            </div>
+            <p class="tiny" id="rdHint">杂波比目标回波高 30 dB，且带 0.35 m/s 多普勒展宽。</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="card pad tech-card">
+        <div class="card-head">
+          <h3>MTI 后检测概率：速度盲区与打开的速度带</h3>
+          <span class="tag amber">实测（仿真）曲线</span>
+        </div>
+        <canvas id="pdCanvas" class="chart"></canvas>
+        <p class="card-note">杂波/目标功率比固定 30 dB。无 MTI 时 2.5~10 m/s 的目标被同距离邻域强杂波遮蔽，Pd 降至 0.2 以下；MTI 后 Pd ≥ 0.9 的速度下限降至 1.76 m/s，代价是 ±1.17 m/s 的固有盲区——恰好覆盖悬停与极慢速目标。</p>
+      </article>
+
+      <article class="card pad tech-card">
+        <div class="card-head">
+          <h3>NLOSNet：把“污染源”变成“可用信息”</h3>
+          <span class="tag">5 762 参数</span>
+        </div>
+        <div class="confusion">
+          <div class="cm-cell tp"><b>10 824</b><span>非视距 → 非视距</span></div>
+          <div class="cm-cell fp"><b>23</b><span>视距 → 非视距</span></div>
+          <div class="cm-cell fn"><b>54</b><span>非视距 → 视距</span></div>
+          <div class="cm-cell tn"><b>12 349</b><span>视距 → 视距</span></div>
+        </div>
+        <div class="kv-row">
+          <div><span>识别准确率</span><b>99.7%</b></div>
+          <div><span>F1</span><b>0.996</b></div>
+          <div><span>附加距离 RMSE</span><b>3.34 m</b></div>
+        </div>
+        <p class="card-note">策略不是“非视距就丢弃”，而是“去偏 + 异方差加权”：扣除估计的附加距离，再按视距置信度放大观测方差（1.2 m → 6.0 m），保留几何约束。</p>
+      </article>
+
+      <article class="card pad tech-card">
+        <div class="card-head">
+          <h3>三种定位方案：误差分位数</h3>
+          <span class="tag">172 872 点</span>
+        </div>
+        <canvas id="cdfCanvas" class="chart"></canvas>
+        <div class="cdf-legend" id="cdfLegend"></div>
+      </article>
+
+      <article class="card pad tech-card">
+        <div class="card-head">
+          <h3>TrajNet：1.5 s 预测窗</h3>
+          <span class="tag">7 198 参数</span>
+        </div>
+        <canvas id="predCanvas" class="chart"></canvas>
+        <p class="card-note">预测窗末端的平均绝对误差由匀速外推的 <b>2.08 m</b> 降至 <b>0.57 m</b>；600 组构造冲突中，双门限告警平均提前 <b>1.62 s</b>，误报率 <b>11.9%</b>（部分因预测窗长度受限，方案已列为 P2 提升项）。</p>
+      </article>
+
+      <article class="card pad tech-card wide">
+        <div class="card-head">
+          <h3>端到端时延预算：合计 27.3 ms</h3>
+          <span class="tag green">上限 100 ms</span>
+        </div>
+        <div class="latency-bar" id="latencyBar"></div>
+        <div class="latency-notes">
+          <div><span>CPI 相参处理</span><b>20.0 ms</b></div>
+          <div><span>站侧处理（加速 40×）</span><b>5.71 ms</b></div>
+          <div><span>回传上行</span><b>0.5 ms</b></div>
+          <div><span>AI 推理</span><b>0.02 ms</b></div>
+          <div><span>融合 + 航迹更新</span><b>0.05 ms</b></div>
+          <div><span>告警下发</span><b>1.0 ms</b></div>
+        </div>
+        <p class="card-note">参考 CPU 上处理链实测 228 ms/CPI（等效 2.3 GFLOPS），按硬件加速 40× 折算；站侧只上报约 40 字节 / 点迹，原始 IQ 不上传。</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ 四、资源协同 ============ -->
+  <section class="section" id="resource">
+    <div class="section-head">
+      <span class="sec-index">04</span>
+      <div>
+        <h2>资源协同：ρ 工作点与三级算力</h2>
+        <p class="sec-lead">通感一体化并非“免费”：用于感知的时频资源不能再用于通信。方案把感知占用比例 ρ 作为可调参数，并给出可运行的推荐工作点。</p>
+      </div>
+    </div>
+
+    <div class="resource-grid">
+      <article class="card pad">
+        <div class="card-head">
+          <h3>感知—通信折中</h3>
+          <span class="tag">可交互</span>
+        </div>
+        <div class="rho-head">
+          <label class="slider-label">感知资源占比 ρ<output id="rhoOut">25%</output></label>
+          <input type="range" id="rhoRange" min="5" max="60" step="1" value="25">
+        </div>
+        <div class="rho-readout">
+          <div><span>通信吞吐</span><b id="rhoThroughput">—</b><em id="rhoLoss">—</em></div>
+          <div><span>检测概率 Pd</span><b id="rhoPd">—</b><em id="rhoPdNote">—</em></div>
+        </div>
+        <canvas id="rhoCanvas" class="chart tall"></canvas>
+        <p class="card-note">约束：Pd ≥ 0.9 且吞吐损失 ≤ 25% → 推荐 ρ = 25%（377 Mbps / Pd 0.92）。航路空闲时可上调 ρ 换灵敏度，高峰下调保通信，由 L3 意图驱动编排完成。</p>
+      </article>
+      <article class="card pad">
+        <div class="card-head">
+          <h3>分层算力：数据不出站</h3>
+          <span class="tag green">1~20 TOPS</span>
+        </div>
+        <div class="layer-stack" id="layerStack"></div>
+        <p class="card-note">站侧只做与本站相关的波形处理与点迹提取；边缘做多站对齐、NLOSNet 与 EKF；区域中心做多机关联、TrajNet 与航路重规划。原始 IQ 不上传，回传带宽从 Gbit/s 量级降至 kbit/s 量级。</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ 五、部署与路径 ============ -->
+  <section class="section" id="deploy">
+    <div class="section-head">
+      <span class="sec-index">05</span>
+      <div>
+        <h2>部署形态与实施路径</h2>
+        <p class="sec-lead">站址复用城市路灯杆、通信杆塔与楼顶站：单站改造以“加装通感板卡 + 边缘算力盒”为主，避免新建铁塔——这是相对专用低空监视雷达方案在经济性上的核心差异。</p>
+      </div>
+    </div>
+
+    <div class="deploy-strip" id="deployStrip"></div>
+
+    <div class="deploy-grid">
+      <div class="table-wrap" id="bomWrap"></div>
+      <div class="copy-block">
+        <h3>单条 2 km 示范线</h3>
+        <p>12 个节点沿航路交错布置：横向 ±120 m、纵向间距 175 m、挂高 60 m；单站覆盖半径按 500 m 设计，相邻站重叠约 40%，保证航路无空洞。星型回传汇聚至区域融合中心，站间通过 6G 空口或光纤实现 μs 级同步。</p>
+        <div class="callout">
+          <span>复用一致性</span>
+          <p>换一个场景，需要改的只是站址排布与先验参数，而不是架构：站点复用既有杆塔、模型全部为万参数级可下沉、对外接口抽象为“点迹 + 航迹”两级。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="roadmap" id="roadmap"></div>
+
+    <div class="replicate-grid" id="replicateGrid"></div>
+  </section>
+
+  <!-- ============ 六、验证 ============ -->
+  <section class="section" id="verify">
+    <div class="section-head">
+      <span class="sec-index">06</span>
+      <div>
+        <h2>验证与复现</h2>
+        <p class="sec-lead">全部结果来自自建链路级与系统级仿真（代码与随机种子随材料提交）。以下数字均标注为“仿真验证”，不等同于外场实测。</p>
+      </div>
+    </div>
+
+    <div class="verify-grid">
+      <div class="table-wrap" id="posWrap"></div>
+      <div class="copy-block">
+        <h3>精度提升来自两点</h3>
+        <ol class="numbered">
+          <li><b>绝对基准换了</b>：ISAC 测距把基准从“卫星到地面”变成“地面站到目标”，不再受电离层与城市多径影响。</li>
+          <li><b>非视距被扣除</b>：AI 识别逐站附加距离并去偏，使非视距观测量从污染源变为可用信息——在视距站常常只有 2~3 个的城市峡谷，这一点对几何精度因子至关重要。</li>
+        </ol>
+        <div class="repro">
+          <span>复现方式</span>
+          <code>python run_all.py &amp;&amp; python make_figures.py</code>
+          <em>Python 3.12 · 仅依赖 NumPy / SciPy / Matplotlib · 全量约 15 分钟</em>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="h3-sub">方案图集（可点击放大）</h3>
+    <div class="gallery" id="gallery"></div>
+
+    <div class="boundary">
+      <div class="boundary-item">
+        <h4>如实说明的边界</h4>
+        <ul>
+          <li>本页与代码包输出的是<b>仿真结果</b>，不是外场实测，页面所有数值均标注“仿真验证”。</li>
+          <li>非视距识别 99.7% 为仿真分布内留出集结果；真实场景存在域偏移，方案已把“仿真预训练 + 实测增量微调”列为 P2 阶段必做项。</li>
+          <li>MTI 存在约 ±1.17 m/s 速度盲区，恰好覆盖悬停与极慢速目标；对策为 MTD 滤波器组 + 交叉视角站点（P1 验证）。</li>
+          <li>未使用任何受限数据集、商用仿真平台私有模块或第三方专利技术。</li>
+        </ul>
+      </div>
+      <div class="boundary-item">
+        <h4>本页面的动态说明</h4>
+        <ul>
+          <li>动态画面是<b>按方案参数生成的交互式可视化</b>，用于呈现部署形态、视距判定、融合定位与告警流程的逻辑，不冒充实时外场数据。</li>
+          <li>误差包络的标准差由表 9 的 CEP95 反推（σ = CEP95 / 2.4477），因此长期观察的误差统计与表 9 一致。</li>
+          <li>航路态势为 120 s 循环演示，6 架目标同时在线；可达 1×/4×/16× 加速播放与拖拽定位。</li>
+          <li>页面静态托管，无后端依赖；数据全部内嵌于 assets/js/data.js。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 七、佐证与专利 ============ -->
+  <section class="section" id="evidence">
+    <div class="section-head">
+      <span class="sec-index">07</span>
+      <div>
+        <h2>佐证与专利：应用成效与技术壁垒</h2>
+        <p class="sec-lead">三家业务单位出具《技术应用证明》，五项发明专利申请已由国家知识产权局受理。按匿名评审要求，证件上的单位名称与通知书上的申请人、发明人个人信息均已模糊处理，其余内容保持原样。</p>
+      </div>
+    </div>
+
+    <div class="block-head">
+      <h3>《技术应用证明》· 3 份</h3>
+      <span class="legend-chip">点击任意图片可放大查看</span>
+    </div>
+    <div class="ev-grid" id="evGrid"></div>
+    <p class="figure-note">三份证明均由应用单位盖章出具，落款日期为 2026 年 10 月；证明正文的表述未作改写，公章与落款保持原样。</p>
+
+    <div class="block-head pt-block-head">
+      <h3>发明专利申请 · 5 项（已受理）</h3>
+      <span class="legend-chip">国家知识产权局 · 申请日 2026.11.13</span>
+    </div>
+    <div class="pt-grid" id="ptGrid"></div>
+
+    <div class="claim-box">
+      <span class="claim-label">审查状态 / REVIEW STATUS</span>
+      <p class="claim-text" id="claimText"></p>
+      <div class="claim-flow" id="claimFlow"></div>
+    </div>
+    <p class="figure-note">通知书上的申请人、发明人及邮寄地址已作匿名模糊处理；专利申请是否授权，以国家知识产权局最终审查结论为准。</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="foot-main">
+    <div class="foot-brand">
+      <b>低空航路数字护栏</b>
+      <p>通感算智一体化的城市低空无人机航路保障</p>
+      <p class="tiny">场景设计赛道 · 面向实际需求的应用场景设计方案<br>全部量化结果为仿真验证，非外场实测。</p>
+    </div>
+    <div class="foot-links">
+      <div>
+        <span>场景</span>
+        <a href="#context">痛点与 KPI</a>
+        <a href="#context">现有方案边界</a>
+      </div>
+      <div>
+        <span>演示</span>
+        <a href="#demo">航路态势</a>
+        <a href="#tech">信号处理</a>
+      </div>
+      <div>
+        <span>落地</span>
+        <a href="#deploy">实施路径</a>
+        <a href="#verify">验证与复现</a>
+        <a href="#evidence">佐证与专利</a>
+      </div>
+    </div>
+  </div>
+  <div class="foot-bar">
+    <span>© 2026 低空航路数字护栏 · 参赛作品演示站</span>
+    <span>SEED 20261113 · 结果可复现</span>
+  </div>
+</footer>
+
+<div class="lightbox" id="lightbox" hidden>
+  <button class="lb-close" id="lbClose" aria-label="关闭">×</button>
+  <figure>
+    <img id="lbImg" alt="">
+    <figcaption id="lbCap"></figcaption>
+  </figure>
+</div>
+
+<div class="js-error" id="jsError" hidden></div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/ui.js"></script>
+<script src="assets/js/scene.js"></script>
+<script src="assets/js/lab.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
